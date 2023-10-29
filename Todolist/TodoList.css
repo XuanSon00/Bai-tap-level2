@@ -1,0 +1,31 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+
+}
+
+.baitap2{
+    background-color: #ddd;
+    padding: 25px;
+    width: 50%;
+}
+
+.baitap2 input{
+    margin-left: 100px;
+    width: 30vh;
+}
+
+.baitap2 ul li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px auto;
+    border-bottom: 1px black solid;
+    margin-bottom: 15px;
+}
+
+
