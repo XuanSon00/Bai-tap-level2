@@ -1,0 +1,40 @@
+.slideshow {
+    position: relative;
+    width: 500px;
+    height: 300px;
+  }
+
+  .slide {
+    width: 100%;
+    height: 100%;
+  }
+/*
+ .slide{
+    display: none;
+ } 
+ .slide:first-child{
+    display: block;
+ }*/
+
+ .hidden{
+    display: none;
+ }
+
+  .prev-next {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .prev-next button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 50%;
+  }
