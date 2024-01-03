@@ -1,0 +1,31 @@
+.container{
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 10px 20px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 10px #ddd;
+}
+
+.container button{
+    float: right;
+}
+
+.avatar{
+    display: flex;
+    gap:5px;
+}
+
+.Img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent; /* Thêm đường viền mặc định với màu trong suốt */
+    transition: border-color 0.3s ease; /* Thêm hiệu ứng chuyển đổi màu sắc cho đường viền */
+  }
+  
+  .Img-clicked {
+
+    border-color: green; /* Đặt màu viền xanh lá cây khi có lớp 'clicked' được áp dụng */
+  }
