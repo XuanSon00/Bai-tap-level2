@@ -12,6 +12,7 @@ import Counter2 from './component/Counter2';
 import Appcounter3 from './component/Appcounter3';
 import store3 from  './store/index3'
 import Counter3 from './component/Counter3';
+
 /*import {
   BrowserRouter,
   createBrowserRouter,
@@ -111,6 +112,10 @@ class Counter5 extends React.Component{
   }
 }*/
 
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from './firebase.js';
+
+console.log(db)
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
@@ -136,7 +141,7 @@ root.render(
 
 
 
-
+{/*
 <BrowserRouter> 
 <Routes>
   <Route path = '/' element ={<Home />}>
@@ -151,6 +156,8 @@ root.render(
 
 
 </BrowserRouter> 
+*/}
+<App />
 
 </>
 );
