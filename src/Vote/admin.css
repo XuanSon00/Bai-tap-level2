@@ -1,0 +1,22 @@
+form, .render {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 10px 20px;
+    margin-top: 50px;
+    border-radius: 5px;
+    box-shadow: 1px 2px 10px #ddd;
+}
+
+form input{
+    margin: 10px 10px;
+}
+
+form button{
+    margin: 0 auto;
+}
+
+table th, table td {
+    width: 20%; 
+  }
+  
