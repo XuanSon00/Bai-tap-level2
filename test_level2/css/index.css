@@ -1,0 +1,39 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+.body{
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+
+
+.row{
+    max-width: 100%;
+}
+
+
+
+.img-container{
+    cursor: pointer;
+}
+
+
+.img-container img{
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+}
+
+.img-container hr{
+    color: #e91e63
+}
+
+.img-container h4{
+    display: flex;
+    justify-content: center;
+}
