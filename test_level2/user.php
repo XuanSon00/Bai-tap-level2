@@ -116,7 +116,9 @@ $userID =$_SESSION['user_id'];
   </div>
 </div>
 
-
+<?php
+    include 'footer.php';
+?>
 
 <script src="js/main.js"></script>
 

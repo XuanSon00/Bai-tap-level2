@@ -39,10 +39,20 @@ require 'config/config.php';
 					header('location:admin.php');
 				}
 			} else{
-				echo "<script>alert('Mật khẩu không đúng')</script>";
+				echo "<script>Swal.fire({
+					icon: 'error',
+					title: 'Lỗi',
+					text: 'Mật khẩu không đúng!',
+				  });
+				  </script>";
 			}
 		} else{
-			echo "<script>alert('Tài khoản không hợp lệ')</script>";
+			echo "<script>Swal.fire({
+				icon: 'error',
+				title: 'Lỗi',
+				text: 'Tài khoản không hợp lệ!',
+			  });
+			  </script>";
 		}
 		
 	}
@@ -95,4 +105,7 @@ require 'config/config.php';
 		</div>
 	</div>
 
+	<?php
+    include 'footer.php';
+?>
 	<script src="js/main.js"></script>

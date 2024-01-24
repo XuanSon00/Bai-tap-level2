@@ -23,17 +23,15 @@ if(!empty($_POST['submit'])) {
                         SET user_name ='$user_name',  user_birthday='$user_birthday', user_email='$user_email', updated_at='$updated_at'
                         WHERE user_id ='$user_id'";
             $resultSql= mysqli_query($link,$editSQL);
-            if (!$resultSql){
-                echo "lỗi"
-            }
-            /*
+
+            
             if($resultSql) {
                 echo "<script>alert('cập nhật thành công')</script>";
                 header('location:../user.php');
                 exit();
             } else{
                 echo "<script>alert('lỗi cập nhật')</script>";
-            }*/
+            }
 }
 }
    $sql = "SELECT *

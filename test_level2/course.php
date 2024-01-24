@@ -218,7 +218,9 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
 
 
 </div>
-
+<?php
+    include 'footer.php';
+?>
 
 
 <script>

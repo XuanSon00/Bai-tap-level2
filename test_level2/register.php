@@ -23,18 +23,36 @@ include 'config/config.php';
                                         WHERE username ='$username'
                                         OR user_email= '$email'");
         if(mysqli_num_rows($duplicate) >0){
-            echo "<script>alert('Tên đăng nhập hoặc email đã được đặt')</script>";
+            echo "<script>Swal.fire({
+				icon: 'error',
+				title: 'Lỗi',
+				text: 'Tên đăng nhập hoặc địa chỉ Email đã được đặt!',
+			  });
+			  </script>";
         } elseif(strpos($email, '@') === false){
-            echo "<script>alert('Email không hợp lệ')</script>";
+            echo "<script>Swal.fire({
+				icon: 'error',
+				title: 'Lỗi',
+				text: 'Địa chỉ email không hợp lệ!',
+			  });
+			  </script>";
         } else {
             if($password == $confirmPassword){
 				//$password = md5($password);
                 $query = "  INSERT INTO users (user_name, username, user_pass, user_email, user_birthday, created_at, user_role, user_active)
                             VALUES ('$user_name','$username', '$password', '$email', '$birthday', NOW(), 1, 0)";
                 mysqli_query($link, $query);
-                echo "<script>alert('Đăng kí thành công')</script>";
+                echo "<script>Swal.fire({
+					title: 'Đăng ký thành công!',
+					icon: 'success'
+				  });</script>";
             } else{
-                echo "<script>alert('Mật khẩu không khớp')</script>";
+                echo "<script>Swal.fire({
+					icon: 'error',
+					title: 'Lỗi',
+					text: 'Mật khẩu không khớp!',
+				  });
+				  </script>";
             }
         }              
     }
@@ -114,6 +132,8 @@ include 'config/config.php';
 		</div>
 	</div>
     
-    
+    <?php
+    include 'footer.php';
+?>
     <script src="js/main.js"></script>
    

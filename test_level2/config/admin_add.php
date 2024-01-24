@@ -1,3 +1,4 @@
+
 <?php
 require 'config.php';
 //thêm dữ liệu vào cơ sở dữ liệu
@@ -39,8 +40,13 @@ if(isset($_POST['submit'])){
             mysqli_stmt_execute($stmt);
 
             if(mysqli_stmt_affected_rows($stmt) > 0){
-                echo "<script>alert('Thêm khóa học thành công');</script>";
-                header('location:../admin.php');
+                echo "<script>Swal.fire({
+                    title: 'The Internet?',
+                    text: 'That thing is still around?',
+                    icon: 'question'
+                  });('Success message');
+                </script>";
+                //header('location:../admin.php');
             }else{
                 echo "<script>alert('Thêm khóa học không thành công')</script>";
                 echo "Lỗi: " . mysqli_error($link);
