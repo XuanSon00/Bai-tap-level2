@@ -74,6 +74,7 @@ require_once 'config/authentication.php';
                             <th>Lớp</th>
                             <th>Giảng viên</th>
                             <th>Mô tả</th>
+                            <th>Học phí</th>
                             <th></th>
                             <th>Trạng thái</th>
                             </tr>";
@@ -88,6 +89,7 @@ require_once 'config/authentication.php';
                         echo "<td>".$row['course_class']. "</td>";
                         echo "<td>".$row['course_teacher']. "</td>";
                         echo "<td>".$row['course_description']. "</td>";
+                        echo "<td>". number_format($row['course_price']) . " vnđ</td>";
                         echo "<td style='text-align:center;'>
                                 <button type='button' class='btn btn-primary course_info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-id='" . $row["course_id"] . "'>
                                     View
@@ -448,11 +450,17 @@ require_once 'config/authentication.php';
             </select>
 			</div>
 
-
-        
             <div class="wrap-input100 validate-input" >
 				<input class="input100" type="text" name="course_description" >
 				<span class="focus-input100" data-placeholder="Mô tả "></span>
+			</div>
+
+            <div class="wrap-input100 validate-input" >
+            <select class="form-select" name='course_price'>
+                <option selected disabled>--Học phí--</option>
+                <option value="1000000" >1.000.000<s> vnđ</s></option>
+                <option value="1500000">1.500.000<s> vnđ</s></option>    
+            </select>
 			</div>
 
             <div class="wrap-input100 validate-input" >
@@ -494,17 +502,8 @@ require_once 'config/authentication.php';
             
 
             <div class="wrap-input100 validate-input" >
-            <select class="form-select" name='teacher_name'>
-                <option selected disabled>--Chọn giảng viên--</option>
-                <option value="Lê Văn A">Lê Văn A</option>
-                <option value="Lê Văn B">Lê Văn B</option>
-                <option value="Lê Văn C">Lê Văn C</option>
-                <option value="Lê Văn D">Lê Văn D</option>
-                <option value="Lê Văn E">Lê Văn E</option>
-                <option value="Lê Văn F">Lê Văn F</option>
-                <option value="Lê Văn G">Lê Văn G</option>
-                <option value="Lê Văn H">Lê Văn H</option>
-            </select>
+                <input class="input100" type="text" name="teacher_name" >
+				<span class="focus-input100" data-placeholder="Nhập tên giảng viên"></span>
 			</div>
 
 

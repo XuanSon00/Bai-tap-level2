@@ -7,7 +7,7 @@ if(isset($_POST['submit'])){
     $course_teacher = mysqli_real_escape_string($link,$_POST['course_teacher']);
     $course_description = mysqli_real_escape_string($link,$_POST['course_description']);
     $course_status = mysqli_real_escape_string($link,$_POST['course_status']);
-
+    $course_price = mysqli_real_escape_string($link,$_POST['course_price']);
 
 //xử lý hình ảnh
     if ($_FILES['image']['error'] === 4) {
@@ -32,11 +32,14 @@ if(isset($_POST['submit'])){
             $imagePath = '../uploads/' . $newImageName;
             move_uploaded_file($tmpName, $imagePath);
             
-            $query = "INSERT INTO courses (course_subject, course_name, course_class, course_description,course_teacher,course_status, course_image) 
-                      VALUES (?,?,?,?,?,?,?)";
+            $query = "INSERT INTO courses (course_subject, course_name, course_class, course_description,course_teacher,course_status, course_image,course_price) 
+                      VALUES (?,?,?,?,?,?,?,?)";
 
             $stmt = mysqli_prepare($link, $query);
-            mysqli_stmt_bind_param($stmt, "sssssss",$course_subject, $course_name, $course_class, $course_description, $course_teacher, $course_status, $imagePath);
+            $coursePrice = (int)$course_price;
+          
+            
+            mysqli_stmt_bind_param($stmt, "ssssssss",$course_subject, $course_name, $course_class, $course_description, $course_teacher, $course_status, $imagePath, $coursePrice);
             mysqli_stmt_execute($stmt);
 
             if(mysqli_stmt_affected_rows($stmt) > 0){
@@ -56,3 +59,10 @@ if(isset($_POST['submit'])){
 
 
 ?>
+
+<script>
+    var alertList = document.querySelectorAll('.alert')
+alertList.forEach(function (alert) {
+  new bootstrap.Alert(alert)
+})
+</script>

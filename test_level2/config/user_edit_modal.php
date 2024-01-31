@@ -9,13 +9,11 @@ if (isset($_POST['submit']))  {
     $user_birthday = $_POST['date'];
     $user_email =mysqli_real_escape_string($link,$_POST['email']);
     $updated_at = date('d-m-Y H:i:s');
-    $duplicate= mysqli_query($link,"SELECT *
+    /*$duplicate= mysqli_query($link,"SELECT *
                                         FROM users
-                                        WHERE user_email= '$user_email'");
+                                        WHERE user_email= '$user_email'");*/
     
-    if (mysqli_num_rows($duplicate) > 0){
-        echo "<script>alert('Email đã được đặt')</script>";
-    }elseif(strpos($user_email, '@') === false){
+    if(strpos($user_email, '@') === false){
         echo "<script>alert('Email không hợp lệ')</script>";
     } else{     
             $editSQL = "UPDATE users

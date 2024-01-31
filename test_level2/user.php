@@ -30,37 +30,48 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
         <hr>
         <?php 
                 if (isset($_SESSION['login']) && $_SESSION['login'] === true  ) {
+                  $sql= "SELECT * FROM users WHERE user_id = ". $_SESSION['user_id'];
+                  $result = mysqli_query($link,$sql);
+                  if(mysqli_num_rows($result) >0){
+                    $row = mysqli_fetch_assoc($result);
+                    $user_name = $row['user_name'];
+                    $username = $row['username'];
+                    $user_birthday = $row['user_birthday'];
+                    $user_email = $row['user_email'];
+                    $user_active = $row['user_active'];
+                    $user_id = $row['user_id'];
+
                         echo "<div class='d-flex'>";
                         echo "  <div>
                                 <b>Họ & Tên:</b>
-                                <span style='margin-left:100px'>" . $_SESSION['user_name'] . " </span>
-                                </div>";
+                                <span style='margin-left:100px'>" . $user_name . " </span>
+                                </div>"; 
                         echo "  <div>
-                                <b>ID: " . sprintf("%02d", $_SESSION['user_id']) . "</b>
+                                <b>ID: " . sprintf("%02d", $user_id) . "</b>
                                 </div>";
                         echo "</div><br>";
                 
                         echo "  <div>
                                 <b>Tên đăng nhập:</b>
-                                <span style='margin-left:35px'>" . $_SESSION['username'] . " </span>
+                                <span style='margin-left:35px'>" . $username . " </span>
                                 </div><br>";
                       
                         echo "  <div>
                                 <b>Ngày sinh:</b>
-                                <span style='margin-left:90px'>" . $_SESSION['user_birthday'] . " </span>
+                                <span style='margin-left:90px'>" . $user_birthday . " </span>
                                 </div><br>";
                         echo "  <div>
                                 <b>Email:</b>
-                                <span style='margin-left:136px'>" . $_SESSION['user_email'] . " </span>
+                                <span style='margin-left:136px'>" . $user_email . " </span>
                                 </div><br>";
                         echo "  <div>
                                 <b>Trạng thái:</b>
-                                <span style='margin-left:80px' class='" . ($_SESSION['user_active'] == 1 ? 'active-user' : 'inactive-user') . "'>
-                                    " . ($_SESSION['user_active'] == 1 ? "Đã kích hoạt" : "Chưa kích hoạt") . "
+                                <span style='margin-left:80px' class='" . ($user_active == 1 ? 'active-user' : 'inactive-user') . "'>
+                                    " . ($user_active == 1 ? "Đã kích hoạt" : "Chưa kích hoạt") . "
                                 </span>";
 
-                      if($_SESSION['user_active']==1){
-                        echo "<button type='button' class='btn btn-danger btn-sm ms-5' onclick='showConfirmation(". $_SESSION['user_id'] .")' name='confirmation_button'>
+                      if($user_active==1){
+                        echo "<button type='button' class='btn btn-danger btn-sm ms-5' onclick='showConfirmation(". $user_id .")' name='confirmation_button'>
                         <i class='fa-solid fa-x'></i>
                         </button>";
                                 } else {
@@ -69,7 +80,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                         </button>";
                                 }
                                 '</div><br>';
-   
+   }
                 } else {
                     echo "Bạn chưa đăng nhập.";
                 }

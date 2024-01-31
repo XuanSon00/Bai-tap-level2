@@ -61,6 +61,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                         <th>Lớp</th>
                         <th>Giảng viên</th>
                         <th></th>
+                        <th>Học phí</th>
                         <th>Trạng thái</th>
                         </tr>";
                 echo "</thead>";
@@ -79,6 +80,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                             </button>
                             <br>
                         </td>";
+                        echo "<td>".number_format($row['course_price']). " vnđ</td>";
                         echo "<td>";
                             echo "<form method='post' action='config/course_detail.php'>";
                                 echo "<input type='hidden' name='course_id' value='" . $row['course_id'] . "'>";
@@ -105,12 +107,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                 </div> <!--div class='table' -->
             </div> <!--div class='course' -->
         </div>
-
-
-
-        
-
-
+<!--Môn đăng ký-->
         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"  aria-labelledby="v-pills-profile-tab">
             <div class='course' style='margin-top:20px'>
                     <div class='table'>

@@ -24,6 +24,8 @@ $course_id = $_POST['course_id'];
         <b>Khóa học: </b><span> <?php echo $row['course_name'] ?> </span><br>
         <b>Mô tả:</b><span> <?php echo $row['course_description'] ?> </span><br>
         <b>Giới thiệu về lớp học :</b> <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste enim autem minus cumque porro, optio similique saepe corrupti dicta consectetur dolore unde voluptate. Consectetur quidem tempora ullam accusamus ea repellat?</span>
+        <hr>
+        <div><b>Học phí: </b><span><?php echo number_format($row['course_price']) ?> vnđ</span></div>
     </div>
 </div>       
 <?php }?>

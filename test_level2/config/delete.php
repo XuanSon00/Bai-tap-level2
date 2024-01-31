@@ -9,12 +9,20 @@ if(isset($_POST['delete'])){
             WHERE course_id=$id";
     $query = mysqli_query($link,$sql);
 
-
     if($query){
         echo "<script>alert('Xóa thành công');</script>";
         header('location:../admin.php');
     } else {
         echo "<script>alert('Có lỗi khi xóa!!');</script>";
+    }
+
+    $sql_user_courses = "   DELETE FROM user_courses 
+                            WHERE course_id = $id";
+    $query_user_courses = mysqli_query($link, $sql_user_courses);
+    if ($query_user_courses) {
+        echo "Xóa thành công";
+    } else {
+        echo "Lỗi khi xóa";
     }
 }
 

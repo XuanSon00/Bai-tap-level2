@@ -17,22 +17,24 @@ require 'config/config.php';
 		if(mysqli_num_rows($result) >0){
 			//if($password == $row['user_pass'])
 			if (password_verify($password, $row['user_pass'])){
-				$_SESSION['username'] = $row['username'];// lưu tên người dùng vào session
+				/*$_SESSION['username'] = $row['username'];// lưu tên người dùng vào session
 				$_SESSION['user_role'] = $row['user_role'];
 				$_SESSION['user_name'] = $row['user_name'];
 				$_SESSION['user_pass'] = $row['user_pass'];
 				$_SESSION['user_birthday'] = $row['user_birthday'];
 				$_SESSION['user_email'] = $row['user_email'];
-				$_SESSION['user_active'] = $row['user_active'];
+				$_SESSION['user_active'] = $row['user_active'];*/
 				$_SESSION['user_id'] = $row['user_id'];
 				if($row['user_role'] == 1){ // người dùng
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];
 					header('location:user.php');
+					exit();
 				} elseif($row['user_role'] ==0) { //admin
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];
 					header('location:admin.php');
+					exit();
 				}
 			} else{
 				echo "<script>Swal.fire({
