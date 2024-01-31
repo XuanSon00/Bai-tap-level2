@@ -2,7 +2,6 @@
 $page='login'; 
 include 'header.php';
 require 'config/config.php';
-
 ?>
 <link rel="stylesheet" href="css/register.css">
 
@@ -15,10 +14,9 @@ require 'config/config.php';
 										WHERE username ='$username'");
 		$row = mysqli_fetch_assoc($result);
 
-		
-
 		if(mysqli_num_rows($result) >0){
-			if($password == $row['user_pass']){
+			//if($password == $row['user_pass'])
+			if (password_verify($password, $row['user_pass'])){
 				$_SESSION['username'] = $row['username'];// lưu tên người dùng vào session
 				$_SESSION['user_role'] = $row['user_role'];
 				$_SESSION['user_name'] = $row['user_name'];
@@ -27,8 +25,6 @@ require 'config/config.php';
 				$_SESSION['user_email'] = $row['user_email'];
 				$_SESSION['user_active'] = $row['user_active'];
 				$_SESSION['user_id'] = $row['user_id'];
-
-
 				if($row['user_role'] == 1){ // người dùng
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];

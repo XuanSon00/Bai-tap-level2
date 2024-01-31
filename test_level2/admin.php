@@ -4,256 +4,173 @@ require 'config/config.php';
 include 'header.php';
 require_once 'config/authentication.php';
 ?>
+<!--------------------CSS FILE------------------------------------->
 <link rel="stylesheet" href="css/register.css">
 <link rel="stylesheet" href="css/admin.css">
-
-<style>
-    /* Ẩn bảng danh sách khóa học khi tìm kiếm*/
-    .course-table.hidden {
-        display: none;
-    }
-</style>
-
-<script>
-    alertify.alert('Success message');
-</script>
-<?php
-//Tìm kiếm danh sách khóa học
-if(isset($_POST['search'])) {
-    $searchValue = $_POST['search'];
-    $no = 1;
-
-    $query = "  SELECT * 
-                FROM courses 
-                WHERE course_subject 
-                LIKE '%$searchValue%'";
-    $result = $link->query($query);
-
-    if($result->num_rows > 0) {
-        // Hiển thị kết quả tìm kiếm
-        echo "<div class = 'container search-results'>";
-        echo "<table class='content-table'>";
-        echo "<thead>";
-        echo "<tr>
-                <th>Id</th>
-                <th></th>
-                <th>Tên Môn học</th>
-                <th>Tên khóa học</th>
-                <th>Lớp</th>
-                <th>Mô tả</th>
-                <th></th>
-                <th>Trạng thái</th>
-              </tr>";
-        echo "</thead>";
-        echo "<tbody>";
-
-        while($row = $result->fetch_assoc()){
-        echo "<tr>";
-        echo "<td>".$no++."</td>";
-        echo "<td><img src='./uploads/".$row['course_image']."' ></td>";
-        echo "<td>".$row['course_subject']."</td>";
-        echo "<td>".$row['course_name']."</td>";
-        echo "<td>".$row['course_class']."</td>";
-        echo "<td>".$row['course_description']."</td>";
-        echo "<td style='text-align:center;'>
-                    <button type='button' class='btn btn-primary course_info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-id='" . $row["course_id"] . "'>
-                        View
-                    </button><br>
-                            
-                    <form action='config/delete.php' method='post'style='margin:0'>
-                        <input type='hidden' name='id' value='{$row['course_id']}' />                            
-                        <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
-                     </form>
-                            
-                 </td>";
-        echo "<td>";
-                if ($row['course_status'] == 1) {
-        echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=0" class= "btn btn-primary">Mở</a></p>';
-                } else  {
-        echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=1" class= "btn btn-danger">Đóng</a></p>';
-                }
-        echo "</td>";
-                        
-        echo "</tr>";
-                    }
-        echo "</tbody>";
-
-        echo "</table>" ;
-        echo "</div>";
-    } else {
-        echo "Không tìm thấy kết quả.";
-    }
-}
-?>
-
-
-<div class="container course-table <?php if(isset($_POST['search'])) { echo "hidden"; } ?>">
+<!----------------------------------------------------------------->
+<div class="container course-table">
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Danh sách khóa học</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Danh sách người dùng</button>
-            </li>
-        </ul>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Danh sách môn học</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Danh sách Người dùng</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="teacher-tab" data-bs-toggle="tab" data-bs-target="#teacher-tab-pane" type="button" role="tab" aria-controls="teacher-tab-pane" aria-selected="false">Danh sách Giảng Viên</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="teachSubject-tab" data-bs-toggle="tab" data-bs-target="#teachSubject-tab-pane" type="button" role="tab" aria-controls="teachSubject-tab-pane" aria-selected="false">Giảng viên môn học</button>
+        </li>
+    </ul>
 
     <div class="tab-content" id="pills-tabContent">
-                   <!--Tab danh sách khóa học-->
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-        <form action="" style='margin:0' method='post'>
-            <div class="d-flex">
-                <input class="form-control me-2 search" name ='search' type="text" placeholder="Tìm kiếm..." value='' >
-                <button class="searchBtn"   style ='background-color:#e91e63; width:50px '><i class='fa fa-search'></i></button>
-            </div>
-            <div class='d-flex'>
-                <div class='total_courses'>
-                    <span >Các khóa học đang có: </span>
-                    <span class='course_count'>
-                        <?php 
-                            $query = 'SELECT COUNT(*) AS total_row FROM courses';
-                            $result = $link->query($query);
+        <!---------------------------Tab danh sách khóa học--------------------------------------->
+        <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            <form action="" style='margin:0' method='post'>
+                <div class='d-flex'>
+                    <div class='total_courses'>
+                        <span >Các khóa học đang có: </span>
+                        <span class='course_count'>
+                            <?php 
+                                $query = 'SELECT COUNT(*) AS total_row FROM courses';
+                                $result = $link->query($query);
 
-                            if($result) {
-                                $row = $result->fetch_assoc();
-                                echo $row['total_row'];
-                            } else {
-                                echo "<p style='color:red'>lỗi</p> ";
+                                if($result) {
+                                    $row = $result->fetch_assoc();
+                                    echo $row['total_row'];
+                                } else {
+                                    echo "<p style='color:red'>lỗi</p> ";
+                                }
+                            ?>
+                        </span>
+                    </div>
+                    <div style='margin-left: auto' >
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal">
+                    <i class="zmdi zmdi-plus-circle-o"></i>
+                        Thêm khóa học
+                    </button>
+                    </div>
+
+
+                </div>
+
+                <div class='course' style='margin-top:20px'>
+                    <div class='table'>
+                <?php
+                $no = 1;
+                $sql = "SELECT *   
+                        FROM courses";
+                $result = $link->query($sql);
+                
+                if($result ->num_rows >0) {
+                    echo "<table class='content-table' id='Course'>";
+                    echo "<thead>";
+                    echo "  <tr>
+                            <th>Id</th>
+                            <th></th>
+                            <th>Tên Môn học</th>
+                            <th>Tên khóa học</th>
+                            <th>Lớp</th>
+                            <th>Giảng viên</th>
+                            <th>Mô tả</th>
+                            <th></th>
+                            <th>Trạng thái</th>
+                            </tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
+                    while($row=$result->fetch_assoc()){
+                        echo "<tr >";
+                        echo "<td>".$no++. "</td>";
+                        echo "<td><img src='./uploads/".$row['course_image']."' ></td>";
+                        echo "<td>".$row['course_subject']. "</td>";
+                        echo "<td>".$row['course_name']. "</td>";
+                        echo "<td>".$row['course_class']. "</td>";
+                        echo "<td>".$row['course_teacher']. "</td>";
+                        echo "<td>".$row['course_description']. "</td>";
+                        echo "<td style='text-align:center;'>
+                                <button type='button' class='btn btn-primary course_info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-id='" . $row["course_id"] . "'>
+                                    View
+                                </button><br>
+                                
+                                    <form action='config/delete.php' method='post'style='margin:0'>
+                                        <input type='hidden' name='id' value='{$row['course_id']}' />                            
+                                        <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
+                                    </form>
+                                
+                            </td>";
+                        echo "<td>";
+                            if ($row['course_status'] == 1) {
+                                echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=0" class= "btn btn-primary">Mở</a></p>';
+                            } else  {
+                                echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=1" class= "btn btn-danger">Đóng</a></p>';
                             }
-                        ?>
-                    </span>
+                        echo "</td>";
+                                
+                        echo "</tr>";
+                        }
+                    echo "</tbody>";
+
+                    echo "</table>" ;       
+                } else {
+                    echo "<script>Không có dữ liệu</script>";
+                }
+                
+                //var_dump($row)
+                
+                ?>
+
+                    </div>
                 </div>
-
-            
-
-                <div style='margin-left: auto' >
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal">
-                <i class="zmdi zmdi-plus-circle-o"></i>
-                    Thêm khóa học
-                </button>
-                </div>
+            </form>
+        </div><!--div home-tab-->
+        
+        
 
 
-            </div>
+    <!---------------------------Tab danh sách người dùng--------------------------------------->
+        <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <form action="" style='margin:0' method='post'>              
+    <div class='d-flex'>
+        <div class='total_courses'>
+            <span >Danh sách người dùng đăng ký: </span>
+            <span class='course_count'>
+                <?php 
+                    $query = 'SELECT COUNT(*) AS total_row FROM users WHERE user_role <> 0';
+                    $result = $link->query($query);
 
-            <div class='course' style='margin-top:20px'>
-                <div class='table'>
+                    if($result) {
+                        $row = $result->fetch_assoc();
+                        echo $row['total_row'];
+                    } else {
+                        echo "<p style='color:red'>lỗi</p> ";
+                    }
+                ?>
+            </span>
+        </div>
+    </div>
+
+    <?php 
+        if(isset($_POST['user_active'])){
+            $userId = $_POST['user_active'];
+            $sql = "UPDATE users 
+                    SET user_active = 1 
+                    WHERE user_id = $userId";
+            $link->query($sql);
+        }
+    ?>
+
+    <div class='course' style='margin-top:20px'>
+        <div class='table'>
             <?php
             $no = 1;
-            $sql = "SELECT *   
-                    FROM courses";
+            $sql = "SELECT * FROM users WHERE user_role <> 0";
             $result = $link->query($sql);
             
-            if($result ->num_rows >0) {
-                echo "<table class='content-table'>";
+            if($result->num_rows > 0) {
+                echo "<table class='content-table' id='User' style='width:100%'>";
                 echo "<thead>";
-                echo "  <tr>
-                        <th>Id</th>
-                        <th></th>
-                        <th>Tên Môn học</th>
-                        <th>Tên khóa học</th>
-                        <th>Lớp</th>
-                        <th>Mô tả</th>
-                        <th></th>
-                        <th>Trạng thái</th>
-                        </tr>";
-                echo "</thead>";
-                echo "<tbody>";
-                while($row=$result->fetch_assoc()){
-                    echo "<tr >";
-                    echo "<td>".$no++. "</td>";
-                    echo "<td><img src='./uploads/".$row['course_image']."' ></td>";
-                    echo "<td>".$row['course_subject']. "</td>";
-                    echo "<td>".$row['course_name']. "</td>";
-                    echo "<td>".$row['course_class']. "</td>";
-                    echo "<td>".$row['course_description']. "</td>";
-                    echo "<td style='text-align:center;'>
-                            <button type='button' class='btn btn-primary course_info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-id='" . $row["course_id"] . "'>
-                                View
-                            </button><br>
-                            
-                                <form action='config/delete.php' method='post'style='margin:0'>
-                                    <input type='hidden' name='id' value='{$row['course_id']}' />                            
-                                    <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
-                                </form>
-                            
-                        </td>";
-                    echo "<td>";
-                        if ($row['course_status'] == 1) {
-                            echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=0" class= "btn btn-primary">Mở</a></p>';
-                        } else  {
-                            echo '<p><a href="config/status.php?Id='.$row['course_id'].'&course_status=1" class= "btn btn-danger">Đóng</a></p>';
-                        }
-                    echo "</td>";
-                            
-                    echo "</tr>";
-                    }
-                echo "</tbody>";
-
-                echo "</table>" ;       
-            } else {
-                echo "<script>Không có dữ liệu</script>";
-            }
-            
-            //var_dump($row)
-            
-            ?>
-
-                </div>
-            </div>
-        </form>
-
-        </div>
-
-
-        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-           <!--Tab danh sách người dùng-->
-           <form action="" style='margin:0' method='post'>              
-        <div class='d-flex'>
-            <div class='total_courses'>
-                <span >Danh sách người dùng đăng ký: </span>
-                <span class='course_count'>
-                    <?php 
-                        $query = '  SELECT COUNT(*) AS total_row 
-                                    FROM users
-                                    WHERE user_role <>0'; //lọc ra hàng trong bảng giá trị khác 0
-                        $result = $link->query($query);
-
-                        if($result) {
-                            $row = $result->fetch_assoc();
-                            echo $row['total_row'];
-                        } else {
-                            echo "<p style='color:red'>lỗi</p> ";
-                        }
-                    ?>
-                </span>
-            </div>
-
-        </div>
-
-
-
-<?php 
-    if(isset($_POST['user_active'])){
-        $userId = $_POST['user_active'];
-        $sql = "UPDATE users SET user_active = 1 WHERE user_id = $userId";
-        // Thực thi truy vấn để cập nhật giá trị cột user_active thành 1 cho người dùng có user_id tương ứng
-        $link->query($sql);
-    }
-?>
-        <div class='course' style='margin-top:20px'>
-            <div class='table'>
-        <?php
-        $no = 1;
-        $sql = "SELECT *   
-                FROM users
-                WHERE user_role <>0";//lọc ra hàng trong bảng giá trị khác 0(không tính tài khoản admin)
-                
-        $result = $link->query($sql);
-        
-        if($result ->num_rows >0) {
-            echo "<table class='content-table'>";
-            echo "<thead>";
-            echo "  <tr>
+                echo "<tr>
                         <th>Id</th>
                         <th>Tên người dùng </th>
                         <th>Ngày sinh</th>
@@ -262,55 +179,208 @@ if(isset($_POST['search'])) {
                         <th></th>
                         <th>Kích hoạt</th>
                     </tr>";
-            echo "</thead>";
-            echo "<tbody>";
-            while($row=$result->fetch_assoc()){
-                echo "<tr >";
-                echo "<td>".$no++. "</td>";
-                echo "<td>".$row['user_name']. "</td>";
-                echo "<td>".$row['user_birthday']. "</td>";
-                echo "<td>".$row['user_email']. "</td>";    
-                echo "<td>".$row['created_at']. "</td>";
-                echo "
-                <td style='text-align:center;'>
+                echo "</thead>";
+                echo "<tbody>";
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>".$no++. "</td>";
+                    echo "<td>".$row['user_name']. "</td>";
+                    echo "<td>".$row['user_birthday']. "</td>";
+                    echo "<td>".$row['user_email']. "</td>";    
+                    echo "<td>".$row['created_at']. "</td>";
+                    echo "
+                    <td style='text-align:center;'>
                         <button type='button' class='btn btn-primary user_info' data-bs-toggle='modal' data-bs-target='#detailModal2' data-id='" . $row["user_id"] . "'>
                             View
                         </button><br>
                         
-                            <form action='config/delete.php' method='post'style='margin:0'>
-                                <input type='hidden' name='id' value='{$row['user_id']}' />                            
-                                <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
-                            </form>
-                        
+                        <form action='config/delete.php' method='post' style='margin:0'>
+                            <input type='hidden' name='id' value='{$row['user_id']}' />                            
+                            <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
+                        </form>
                     </td>";  
-                echo "<td>
-                    <div class='form-check form-switch'>
-                    <input type='hidden' name='user_id' value='" . $row['user_id'] . "' />
-                    <input class='form-check-input' type='checkbox' name='user_active' role='switch' data-id='" . $row['user_id'] . "' " . ($row['user_active'] == 1 ? 'checked' : '') . ">
-                    </div>
-                    
+                    echo "<td>
+                        <div class='form-check form-switch'>
+                            <input type='hidden' name='user_id' value='" . $row['user_id'] . "' />
+                            <input class='form-check-input' type='checkbox' name='user_active' role='switch' data-id='" . $row['user_id'] . "' " . ($row['user_active'] == 1 ? 'checked' : '') . ">
+                        </div>
                     </td>";
-                echo "</tr>";
-                 }
-            echo "</tbody>";
-
-            echo "</table>" ;       
-        } else {
-            echo "<script>Không có dữ liệu</script>";
-        }
-        
-        //var_dump($row)
-   
-        ?>
-
-            </div>
+                    echo "</tr>";
+                }
+                echo "</tbody>";
+                echo "</table>";
+            } else {
+                echo "<p>Không có dữ liệu</p>";
+            }
+            ?>
         </div>
-    </form>
-        </div>
+    </div>
+</form>
+        </div><!--div profile-tab-->
+        <!--Tab danh sách giảng viên-->
+        <div class="tab-pane fade" id="teacher-tab-pane" role="tabpanel" aria-labelledby="teacher-tab" tabindex="0">
+        <form action="" style='margin:0' method='post'>
+                <div class='d-flex'>
+                    <div class='total_courses'>
+                        <span >Giảng viên: </span>
+                        <span class='course_count'>
+                            <?php 
+                                $query = 'SELECT COUNT(*) AS total_row FROM teachers';
+                                $result = $link->query($query);
+
+                                if($result) {
+                                    $row = $result->fetch_assoc();
+                                    echo $row['total_row'];
+                                } else {
+                                    echo "<p style='color:red'>lỗi</p> ";
+                                }
+                            ?>
+                        </span>
+                    </div>
+
+                
+
+                    <div style='margin-left: auto' >
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal3">
+                    <i class="zmdi zmdi-plus-circle-o"></i>
+                        Thêm giảng viên
+                    </button>
+                    </div>
 
 
+                </div>
 
-    </div><!--div class="tab-content"-->
+                <div class='course' style='margin-top:20px'>
+                    <div class='table'>
+                <?php
+                $no = 1;
+                $sql = "SELECT *   
+                        FROM teachers";
+                $result = $link->query($sql);
+                
+                if($result ->num_rows >0) {
+                    echo "<table class='content-table w-100' id='Teacher'>";
+                    echo "<thead>";
+                    echo "  <tr>
+                            <th>Id</th>
+                            <th>Tên Giảng Viên</th>
+                            <th>Ngày Sinh</th>
+                            <th>Email</th>
+                            <th>Ngày thêm vào</th>
+                            <th>Trạng thái</th>
+                            </tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
+                    while($row=$result->fetch_assoc()){
+                        echo "<tr >";
+                        echo "<td>".$no++. "</td>";
+                        echo "<td>".$row['teacher_name']. "</td>";
+                        echo "<td>".$row['teacher_birthday']. "</td>";
+                        echo "<td>".$row['teacher_email']. "</td>";
+                        echo "<td>".$row['created_at']. "</td>";
+                        echo "<td style='text-align:center;'>
+                                <form action='config/delete.php' method='post'style='margin:0'>
+                                    <input type='hidden' name='id' value='{$row['teacher_id']}' />                            
+                                    <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
+                                </form>
+                            </td>";
+                                
+                        echo "</tr>";
+                        }
+                    echo "</tbody>";
+
+                    echo "</table>" ;       
+                } else {
+                    echo "<script>Không có dữ liệu</script>";
+                }
+                
+                //var_dump($row)
+                
+                ?>
+
+                    </div>
+                </div>
+            </form> 
+        </div><!--div teacher-tab-->
+
+        <!--Tab danh sách môn học cho giảng viên-->
+        <div class="tab-pane fade" id="teachSubject-tab-pane" role="tabpanel" aria-labelledby="teachSubject-tab" tabindex="0">
+        <form action="" style='margin:0' method='post'>
+                <div class='d-flex'>
+                    <div class='total_courses'>
+                       
+                    </div>
+
+                
+
+                    <div style='margin-left: auto' >
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal4">
+                    <i class="zmdi zmdi-plus-circle-o"></i>
+                        Thêm 
+                    </button>
+                    </div>
+
+
+                </div>
+
+                <div class='course' style='margin-top:20px'>
+                    <div class='table'>
+                <?php
+                $no = 1;
+                $sql = "SELECT subjects.subject_id, teachers.teacher_id, subjects.subject_name, teachers.teacher_name
+                        FROM teach_subject
+                        JOIN subjects ON teach_subject.subject_id = subjects.subject_id
+                        JOIN teachers ON teach_subject.teacher_id = teachers.teacher_id";              
+                $result = $link->query($sql);
+                
+                
+                if($result ->num_rows >0) {
+                    echo "<table class='content-table w-100' id='TeachSubject'>";
+                    echo "<thead>";
+                    echo "  <tr>
+                            <th>Id</th>
+                            <th>Tên Giảng viên</th>
+                            <th>ID Giảng Viên</th>
+                            <th>Tên Môn Học</th>
+                            <th>ID Môn Học</th>   
+                            <th></th>
+                            </tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
+                    while($row=$result->fetch_assoc()){
+                        echo "<tr >";
+                        echo "<td>".$no++. "</td>";
+                        echo "<td>".$row['teacher_name']. "</td>";
+                        echo "<td>".$row['teacher_id']. "</td>";
+                        echo "<td>".$row['subject_name']. "</td>";
+                        echo "<td>".$row['subject_id']. "</td>";
+                        echo "<td>
+                        <form action='config/delete.php' method='post' style='margin:0'>
+                                <input type='hidden' name='id' value='{$row['teacher_id']}' />                            
+                                <input type='submit' name='delete' class='btn btn-danger' value='Delete' />                            
+                            </form>";
+
+                        echo "</td>";    
+                        echo "</tr>";
+                        }
+                    echo "</tbody>";
+
+                    echo "</table>" ;       
+                } else {
+                    echo "<script>Không có dữ liệu</script>";
+                }
+                
+                //var_dump($row)
+                
+                ?>
+
+                    </div>
+                </div>
+            </form> 
+        </div><!--div teacher-tab-->
+
+</div><!--div class="tab-content"-->
+    
 </div> <!--div class="container"-->
 
 
@@ -331,23 +401,42 @@ if(isset($_POST['search'])) {
             <div class="wrap-input100 validate-input" >
             <select class="form-select" name='course_subject'>
                 <option selected disabled>--Chọn Môn Học--</option>
-                <option value="Toán Học">Toán Học</option>
-                <option value="Vật Lý">Vật Lý</option>
-                <option value="Hóa Học">Hóa Học</option>
-                <option value="Tiếng Anh">Tiếng Anh</option>
-                <option value="Ngữ Văn">Ngữ Văn</option>
-                <option value="Sinh Học">Sinh Học</option>
-                <option value="Lịch Sử">Lịch Sử</option>
-                <option value="Địa Lý">Địa Lý</option>
+                <?php 
+                    $query="SELECT subject_name
+                            FROM subjects";
+                    $result= mysqli_query($link,$query);
+                    if($result > 0){
+                        while ($row=mysqli_fetch_assoc($result)) {
+                            echo '<option value=" '. $row['subject_name'] . '" >' . $row['subject_name'] .'</option>';
+                        }
+                    }
+                ?>
             </select>
 			</div>
 
             <div class="wrap-input100 validate-input" >
             <select class="form-select" name='course_class'>
+
                 <option selected disabled>--Chọn lớp--</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
+            </select>
+			</div>
+
+            <div class="wrap-input100 validate-input" >
+            <select class="form-select" name='course_teacher'>
+                <option selected disabled>--Giảng viên--</option>
+                <?php 
+                    $query="SELECT teacher_name
+                            FROM teachers";
+                    $result= mysqli_query($link,$query);
+                    if($result > 0){
+                        while ($row=mysqli_fetch_assoc($result)) {
+                            echo '<option value=" '. $row['teacher_name'] . '" >' . $row['teacher_name'] .'</option>';
+                        }
+                    }
+                ?>
             </select>
 			</div>
 
@@ -390,6 +479,115 @@ if(isset($_POST['search'])) {
   </div>
 </div>
 
+
+<!---------------------------------Modal Thêm giảng viên----------------------->
+<div class="modal" id="AddModal3">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Thêm thông tin giảng viên -->
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm Giảng viên</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form action="config/admin_teacher.php" method='post'>
+         <div class="modal-body">
+            
+
+            <div class="wrap-input100 validate-input" >
+            <select class="form-select" name='teacher_name'>
+                <option selected disabled>--Chọn giảng viên--</option>
+                <option value="Lê Văn A">Lê Văn A</option>
+                <option value="Lê Văn B">Lê Văn B</option>
+                <option value="Lê Văn C">Lê Văn C</option>
+                <option value="Lê Văn D">Lê Văn D</option>
+                <option value="Lê Văn E">Lê Văn E</option>
+                <option value="Lê Văn F">Lê Văn F</option>
+                <option value="Lê Văn G">Lê Văn G</option>
+                <option value="Lê Văn H">Lê Văn H</option>
+            </select>
+			</div>
+
+
+
+            <div class="wrap-input100 validate-input" >
+				<input class="input100" type="text" name="teacher_email" >
+				<span class="focus-input100" data-placeholder="Nhập email"></span>
+			</div>
+
+            <div class=" d-flex" >
+                <label for="date" class='input100'>Ngày sinh:</label>
+                <input type="date" id="date" name="teacher_date" style='width: 100%; font-size: 20px' >
+			</div>
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary" name='submit'>Lưu</button>
+      </div> 
+    </form>
+    </div>
+  </div>
+</div>
+
+<!---------------------------------Modal Môn học cho giảng viên----------------------->
+<div class="modal" id="AddModal4">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Thêm môn học cho giảng viên -->
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm Giảng viên Môn học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+        <form action="config/admin_teachSubject.php" method='post'>
+         <div class="modal-body">        
+         <div class="wrap-input100 validate-input" >
+            <select class="form-select" name='teacher_id'>
+                <option selected disabled>--Giảng viên--</option>
+                <?php 
+                    $query="SELECT *
+                            FROM teachers";
+                    $result= mysqli_query($link,$query);
+                    if($result > 0){
+                        while ($row=mysqli_fetch_assoc($result)) {
+                            echo '<option value=" '. $row['teacher_id'] . '" >' . $row['teacher_name'] .'</option>';
+                        }
+                    }
+                ?>
+            </select>
+
+            
+		</div>
+
+
+
+        <div class="wrap-input100 validate-input" >
+            <select class="form-select" name='subject_id'>
+            <option selected disabled>--Môn học--</option>
+                <?php 
+                    $query="SELECT *
+                            FROM subjects";
+                    $result= mysqli_query($link,$query);
+                    if($result > 0){
+                        while ($row=mysqli_fetch_assoc($result)) {
+                            echo '<option value=" '. $row['subject_id'] . '" >' . $row['subject_name'] .'</option>';
+                            //echo '<input type="hidden" name="subject_id" value ="'.$row['subject_id'].'" />';
+                            //echo '<input type="hidden" name="subject_des" value ="'.$row['subject_des'].'" />';
+                        }
+                    }
+                ?>
+            </select>
+            <!--<input type="hidden" name='teacher_id' value="">-->
+            <!--<input type="hidden" name='teacher_id' value="">-->
+            </div>
+
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="submit" class="btn btn-primary" name='submit'>Lưu</button>
+      </div> 
+    </form>
+    </div>
+  </div>
+</div>
 
 <!---------------------------------Modal Xem chi tiết khóa học---------------------->
 <div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -516,24 +714,12 @@ $(document).ready(function () {
     });
 
 
-//Thanh tìm kiếm
-$(document).ready(function() {
-    $('#search-form').submit(function(event) {
-        event.preventDefault();
+//Bảng DataTable
+new DataTable('#Course');
+new DataTable('#User');
+new DataTable('#Teacher');
+new DataTable('#TeachSubject');
 
-        var searchData = $(this).serialize();
-
-        $.ajax({
-            type:"GET",
-            url:'config/admin_search.php',
-            data: searchData,
-            success: function(response){
-                //cập nhật kết quả tìm kiếm trên admin.php
-            $('#search-results').html(response);
-            }
-        });
-    });
-});
 
 </script>
 

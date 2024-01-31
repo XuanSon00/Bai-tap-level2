@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+session_start();
 $user_id = $_POST['user_id'];
    // echo $user_id;
 
@@ -49,7 +50,10 @@ $user_id = $_POST['user_id'];
                     <td><?php echo $row['user_email'] ?></td>
                     <td><span> <?php echo $row['username'] ?></td>
                     <td><?php echo $row['user_pass'] ?></td>
-                    <td></td>
+                    <td><span style='margin-left:80px' class="<?php echo ($_SESSION['user_active'] == 1 ? 'active-user' : 'inactive-user'); ?>">
+                        <?php echo ($_SESSION['user_active'] == 1 ? 'Đã kích hoạt' : 'Chưa kích hoạt'); ?>
+                        </span>
+                    </td>
                 </tr>
             </tbody>
         </table>

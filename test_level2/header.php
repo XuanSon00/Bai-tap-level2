@@ -1,21 +1,24 @@
-<?php 
+<?php
+
 session_start();
-$page='';?>
+?>
 <!--------------------Bootstrap5------------------------------------->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-<!--------------------Font Awesine------------------------------------->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--------------------Jquery------------------------------------->
+<!--------------------jquery------------------------------------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--------------------DataTable------------------------------------->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<!--------------------Font Awesome------------------------------------->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" /><!--------------------Jquery------------------------------------->
 <!--------------------Material Design Iconic------------------------------------->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
 <!--------------------SweetAlert2------------------------------------->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!--------------------AlertifyJS------------------------------------->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/dist/css/alertify.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/dist/css/themes/default.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/dist/alertify.min.js"></script>
+<!--------------------CSS FILE------------------------------------->
 <link rel="stylesheet" href="css/header.css">
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
   <div class="container-fluid" style="padding: 0">
@@ -25,20 +28,20 @@ $page='';?>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent" >
       <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
-        <li class="nav-item <?php if($page=='home'){echo 'active';} ?>">
+        <li class="nav-item <?php if($page=='home'){echo 'current';} ?>">
           <a class="nav-link " aria-current="page" href="index.php">Trang chủ</a>
         </li>
-        <li class="nav-item <?php if($page=='introduce'){echo 'active';} ?>">
+        <li class="nav-item <?php if($page=='introduce'){echo 'current';} ?>">
           <a class="nav-link " aria-current="page" href="introduce.php">Giới thiệu</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item <?php if($page=='course'){echo 'current';} ?>">
           <a class="nav-link" href="course.php">Khóa học</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Liên hệ</a>
         </li>
       </ul>
-      <form class="d-flex" style="padding: 10px 50px 0 0;">
+      <div class="d-flex" style="padding: 10px 50px 0 0;">
       <!--<input class="form-control me-2 search" type="search" placeholder="Tìm kiếm..." aria-label="Search" >
       <button class="searchBtn"  type="submit" style ='background-color:#e91e63; width:50px '><i class='fa fa-search'></i></button>-->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -57,14 +60,14 @@ $page='';?>
         </li>";
     } else {
         echo "<li class='nav-item'>
-                <a class='nav-link " . ($page=='register'? 'active' : '') . "' href='register.php'>Đăng ký</a>
+                <a class='nav-link " . ($page=='register'? 'current' : '') . "' href='register.php'>Đăng ký</a>
               </li>
               <li class='nav-item'>
-                <a class='nav-link " . ($page=='login'? 'active' : '') . "' href='login.php'>Đăng nhập</a>
+                <a class='nav-link " . ($page=='login'? 'current' : '') . "' href='login.php'>Đăng nhập</a>
               </li>";
     }?>
       </ul>
-      </form>
+  </div>
     </div>
   </div>
 </nav>

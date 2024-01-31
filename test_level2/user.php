@@ -7,44 +7,28 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
     header('location: login.php');
     exit();
 }
-
-
-
 ?>
 <link rel="stylesheet" href="css/user.css">
 <link rel="stylesheet" href="css/register.css">
 
- 
-
 <div class='container' style ='padding: 50px'>
 <div class="d-flex align-items-start">
   <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-    <button class="nav-link active btn-custom" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Thông tin chung</button>
- </div>
-
-
-<?php
-$result = mysqli_query($link, "	SELECT *
-                                FROM users");
-$row = mysqli_fetch_assoc($result);
-$userID =$_SESSION['user_id'];
-//var_dump($_SESSION);
-/* select */
-?>
-
+    <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Thông tin chung</button>
+    <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Mật khẩu</button>
+  </div>
 
   <div class="tab-content" id="v-pills-tabContent">
+    <!--Thông tin chung-->
     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-        <div>
-            <div class='d-flex'>
-                <h4>Thông tin cá nhân</h4>
-                    <button type='button' class='btn btn-outline-dark user_info' data-bs-toggle='modal' data-bs-target='#detailModal2' data-id='<?php echo $userID; ?>' style='margin-left:auto';>
-                        <i class="zmdi zmdi-edit" ></i>
-                    </button>
-            </div>
-            
-            <hr>
-            <?php 
+        <div class='d-flex'>
+                    <h4>Thông tin cá nhân</h4>
+                        <button type='button' class='btn btn-outline-dark user_info' data-bs-toggle='modal' data-bs-target='#detailModal2' data-id='<?php echo $userID; ?>' style='margin-left:auto';>
+                            <i class="zmdi zmdi-edit" ></i>
+                        </button>
+        </div><!--class='d-flex'-->
+        <hr>
+        <?php 
                 if (isset($_SESSION['login']) && $_SESSION['login'] === true  ) {
                         echo "<div class='d-flex'>";
                         echo "  <div>
@@ -60,10 +44,7 @@ $userID =$_SESSION['user_id'];
                                 <b>Tên đăng nhập:</b>
                                 <span style='margin-left:35px'>" . $_SESSION['username'] . " </span>
                                 </div><br>";
-                        echo "  <div>
-                                <b>Mật khẩu:</b>
-                                <span style='margin-left:95px'>" . $_SESSION['user_pass'] . " </span>
-                                </div><br>";
+                      
                         echo "  <div>
                                 <b>Ngày sinh:</b>
                                 <span style='margin-left:90px'>" . $_SESSION['user_birthday'] . " </span>
@@ -76,28 +57,66 @@ $userID =$_SESSION['user_id'];
                                 <b>Trạng thái:</b>
                                 <span style='margin-left:80px' class='" . ($_SESSION['user_active'] == 1 ? 'active-user' : 'inactive-user') . "'>
                                     " . ($_SESSION['user_active'] == 1 ? "Đã kích hoạt" : "Chưa kích hoạt") . "
-                                </span>
-                                </div><br>";
+                                </span>";
+
+                      if($_SESSION['user_active']==1){
+                        echo "<button type='button' class='btn btn-danger btn-sm ms-5' onclick='showConfirmation(". $_SESSION['user_id'] .")' name='confirmation_button'>
+                        <i class='fa-solid fa-x'></i>
+                        </button>";
+                                } else {
+                        echo "<button onclick='help()' class='btn-sm ms-5'>
+                        <i class='zmdi zmdi-help'></i>
+                        </button>";
+                                }
+                                '</div><br>';
    
                 } else {
                     echo "Bạn chưa đăng nhập.";
                 }
 
             ?>
-        </div>
-
     </div>
+    </div>
+    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+    <h4>Mật khẩu</h4>
+            <hr>
+            <?php 
+                if (isset($_SESSION['login']) && $_SESSION['login'] === true  ) {
+                        echo "  <form method='post' action='config/user_edit_pass.php' style='width:400px'>
+                        <div class='wrap-input100 validate-input' data-validate='Enter password'>
+                            <span class='btn-show-pass'>
+                              <i class='zmdi zmdi-eye'></i>
+                            </span>
+                            <input class='input100' type='password' name='password' >
+                            <span class='focus-input100' data-placeholder='Nhập mật khẩu'></span>
+                          </div>
+                          <div class='wrap-input100 validate-input' data-validate='Enter password'>
+                            <span class='btn-show-pass'>
+                              <i class='zmdi zmdi-eye'></i>
+                            </span>
+                            <input class='input100' type='password' name='newPassword' >
+                            <span class='focus-input100' data-placeholder='Nhập mật khẩu mới'></span>
+                          </div>
+                          <div class='wrap-input100 validate-input' data-validate='Enter password'>
+                            <span class='btn-show-pass'>
+                              <i class='zmdi zmdi-eye'></i>
+                            </span>
+                            <input class='input100' type='password' name='confirmPassword' required >
+                            <span class='focus-input100' data-placeholder='Nhập lại mật khẩu mới'></span>
+                          </div>
+                          <button class='btn btn-primary' type='submit' name='submit'>Xác nhận</button>
+                        </form>";
+                } else {
+                    echo "Bạn chưa đăng nhập.";
+                }
 
+            ?>
+    </div>
+  </div><!--class='tab-content'-->
+</div><!--class='d-flex'-->
+</div><!--class='container'-->
 
-
-
-
-  </div>
-</div>
-
-</div>
-
-<!---------------------------------Sửa thông tin----------------------->
+<!---------------------------------Modal Sửa thông tin----------------------->
 <div class="modal fade" id="detailModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -115,7 +134,6 @@ $userID =$_SESSION['user_id'];
     </div>
   </div>
 </div>
-
 <?php
     include 'footer.php';
 ?>
@@ -139,4 +157,45 @@ $userID =$_SESSION['user_id'];
         })
     })
 })
+//Hủy kích hoạt tài khoản
+function showConfirmation(user_id) {
+  Swal.fire({
+    title: "Hủy kích hoạt tài khoản?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const data = {
+        user_id: user_id,
+        confirm:true
+      };
+      $.ajax({
+        url:'config/status.php',
+        type:'POST',
+        data: data,
+        success: function(response){
+          Swal.fire({
+          title: "Hủy thành công!",
+          icon: "success"
+        });
+        },
+        error: function(error) {
+          console.error('lỗi', error);
+        }
+      })
+      
+    }
+  });
+}
+//hiện thông báo khi chưa kích hoạt tài khoản
+function help(){
+  Swal.fire({
+  title: "Thông báo",
+  text: "Vui lòng liên hệ Admin để được kích hoạt tài khoản!",
+  icon: "warning"
+});
+}
 </script>

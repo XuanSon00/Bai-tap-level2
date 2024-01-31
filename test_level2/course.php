@@ -59,6 +59,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                         <th>Tên Môn Học</th>
                         <th>Tên Khóa Học</th>
                         <th>Lớp</th>
+                        <th>Giảng viên</th>
                         <th></th>
                         <th>Trạng thái</th>
                         </tr>";
@@ -71,6 +72,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                     echo "<td>".$row['course_subject']. "</td>";
                     echo "<td>".$row['course_name']. "</td>";
                     echo "<td>".$row['course_class']. "</td>";
+                    echo "<td>".$row['course_teacher']. "</td>";
                     echo "<td style='text-align:center;'>
                             <button type='button' class='btn btn-primary course_info' data-bs-toggle='modal' data-bs-target='#staticBackdrop' data-id='" . $row["course_id"] . "'>
                                 View
@@ -78,17 +80,14 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                             <br>
                         </td>";
                         echo "<td>";
-                    
-                        echo "<form method='post' action='config/course_register.php'>";
-                        echo "<input type='hidden' name='course_id' value='" . $row['course_id'] . "'>";
-                        echo "<input type='hidden' name='course_subject' value='" . $row['course_subject'] . "'>";
-                        echo "<input type='hidden' name='course_name' value='" . $row['course_name'] . "'>";
-                        echo "<input type='hidden' name='course_class' value='" . $row['course_class'] . "'>";
-                        
-                        
-                        echo "<button type='submit' name='user_course_submit' id='user_course_submit_btn' class='btn btn-primary'>Đăng ký</button>";
-                        echo "</form>";
-                        
+                            echo "<form method='post' action='config/course_detail.php'>";
+                                echo "<input type='hidden' name='course_id' value='" . $row['course_id'] . "'>";
+                                echo "<input type='hidden' name='course_subject' value='" . $row['course_subject'] . "'>";
+                                echo "<input type='hidden' name='course_name' value='" . $row['course_name'] . "'>";
+                                echo "<input type='hidden' name='course_class' value='" . $row['course_class'] . "'>"; 
+                                echo "<input type='hidden' name='course_teacher' value='" . $row['course_teacher'] . "'>";             
+                                echo "<button type='submit' name='user_course_submit' id='user_course_submit_btn' class='btn btn-primary'>Đăng ký</button>";
+                                echo "</form>";
                         echo "</td>";
                             
                     echo "</tr>";
@@ -112,7 +111,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
         
 
 
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"  aria-labelledby="v-pills-profile-tab">
             <div class='course' style='margin-top:20px'>
                     <div class='table'>
                         <div class='total_courses'>
@@ -148,6 +147,8 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                             <th>Tên Môn Học</th>
                             <th>Lớp</th>
                             <th>Khóa Học</th>
+                            <th>Giảng viên</th>
+                            <th>Thời gian đăng ký</th>
                             <th>Trạng thái</th>
                             </tr>";
                     echo "</thead>";
@@ -158,9 +159,11 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
                         echo "<td>".$row['course_subject']. "</td>";
                         echo "<td>".$row['course_class']. "</td>";
                         echo "<td>".$row['course_name']. "</td>";
+                        echo "<td>".$row['course_teacher']. "</td>";
+                        echo "<td>".$row['created_at']. "</td>";
                         echo "<td style='text-align:center;'>
 
-                                <form method='POST' action='config/course_register.php'>
+                                <form method='POST' action='config/course_detail.php'>
                                     <input type='hidden' name='delete_id' value='".$row['ID']."'>
                                     <button type='submit' class='btn btn-danger' name='delete_course'>Xóa</button>
                                 </form>

@@ -38,9 +38,10 @@ include 'config/config.php';
 			  </script>";
         } else {
             if($password == $confirmPassword){
+				$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 				//$password = md5($password);
                 $query = "  INSERT INTO users (user_name, username, user_pass, user_email, user_birthday, created_at, user_role, user_active)
-                            VALUES ('$user_name','$username', '$password', '$email', '$birthday', NOW(), 1, 0)";
+                            VALUES ('$user_name','$username', '$hashedPassword', '$email', '$birthday', NOW(), 1, 0)";
                 mysqli_query($link, $query);
                 echo "<script>Swal.fire({
 					title: 'Đăng ký thành công!',

@@ -12,9 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result= mysqli_query($link, $sql);
 
     if ($result === TRUE) {
-        echo "Update successful";
+        echo "cập nhật thành công";
     } else {
-        echo "Error updating record: " . $link->error;
+        echo "Lỗi: " . $link->error;
     }
 }
 
