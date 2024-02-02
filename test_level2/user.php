@@ -1,7 +1,13 @@
 <?php 
+if ($_SESSION['user_role'] !== '1') {
+  // Nếu là user, chuyển hướng người dùng 
+  header("Location: admin.php");
+  exit();
+} 
+ob_start();
 $user='user';
 include 'header.php';
-ob_start();
+
 require_once 'config/authentication.php';
 require 'config/config.php';
 if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
@@ -9,11 +15,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
     header('location: login.php');
     exit();
 }
-if ($_SESSION['user_role'] !== '1') {
-  // Nếu là user, chuyển hướng người dùng 
-  header("Location: admin.php");
-  exit();
-} 
+
 
 ?>
 <link rel="stylesheet" href="css/user.css">

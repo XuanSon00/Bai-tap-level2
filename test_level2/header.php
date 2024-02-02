@@ -71,17 +71,17 @@ require 'config/config.php'
             <li><a class='dropdown-item' href='logout.php'>Đăng xuất</a></li>
           </ul>
         </li>";
-    } else {
-      //var_dump(123);
-      //die();
-        echo "<li class='nav-item'>
-                <a class='nav-link " . ($page=='register'? 'current' : '') . "' href='register.php'>Đăng ký</a>
-              </li>
-              <li class='nav-item'>
-                <a class='nav-link " . ($page=='login'? 'current' : '') . "' href='login.php'>Đăng nhập</a>
-              </li>";
-    }
-    }?>
+    } 
+    }else {
+      echo "<li class='nav-item'>
+              <a class='nav-link " . ($page=='register'? 'current' : '') . "' href='register.php'>Đăng ký</a>
+            </li>
+            <li class='nav-item'>
+              <a class='nav-link " . ($page=='login'? 'current' : '') . "' href='login.php'>Đăng nhập</a>
+            </li>";
+  }
+    
+    ?>
       </ul>
   </div>
     </div>
