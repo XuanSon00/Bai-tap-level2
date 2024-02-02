@@ -17,8 +17,4 @@
     <p class="text-center text-body-secondary">&copy; 2023 Company, Inc</p>
   </footer>
 
-  <script>
-    $(document).ready(function(){
-      $('#myTable').DataTable();
-    });
-  </script>
+  

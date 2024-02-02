@@ -6,6 +6,8 @@ require 'config/config.php';
 <link rel="stylesheet" href="css/register.css">
 
 <?php 
+	
+
 	if(isset($_POST['submit'])){
 		$username = mysqli_real_escape_string($link,$_POST['username']);
         $password = mysqli_real_escape_string($link,$_POST['password']);
@@ -28,11 +30,13 @@ require 'config/config.php';
 				if($row['user_role'] == 1){ // người dùng
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];
+					$_SESSION['user_role']= $row['user_role'];
 					header('location:user.php');
 					exit();
 				} elseif($row['user_role'] ==0) { //admin
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];
+					$_SESSION['user_role']= $row['user_role'];
 					header('location:admin.php');
 					exit();
 				}

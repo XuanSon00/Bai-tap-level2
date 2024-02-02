@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 $page='admin'; 
 require 'config/config.php';
 include 'header.php';
@@ -8,6 +10,20 @@ require_once 'config/authentication.php';
 <link rel="stylesheet" href="css/register.css">
 <link rel="stylesheet" href="css/admin.css">
 <!----------------------------------------------------------------->
+<?php 
+if (!isset($_SESSION['login']) || $_SESSION['login'] !== true) {
+    // Người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    header('Location: login.php');
+    exit();
+}
+
+if ($_SESSION['user_role'] !== '0') {
+    // Không phải là admin, chuyển hướng người dùng 
+    header('Location: user.php');
+    exit();
+}
+
+?>
 <div class="container course-table">
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -309,22 +325,15 @@ require_once 'config/authentication.php';
         <div class="tab-pane fade" id="teachSubject-tab-pane" role="tabpanel" aria-labelledby="teachSubject-tab" tabindex="0">
         <form action="" style='margin:0' method='post'>
                 <div class='d-flex'>
-                    <div class='total_courses'>
-                       
+                    <div class='total_courses'>                     
                     </div>
-
-                
-
                     <div style='margin-left: auto' >
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal4">
                     <i class="zmdi zmdi-plus-circle-o"></i>
                         Thêm 
                     </button>
                     </div>
-
-
                 </div>
-
                 <div class='course' style='margin-top:20px'>
                     <div class='table'>
                 <?php
@@ -555,9 +564,6 @@ require_once 'config/authentication.php';
 
             
 		</div>
-
-
-
         <div class="wrap-input100 validate-input" >
             <select class="form-select" name='subject_id'>
             <option selected disabled>--Môn học--</option>
@@ -632,6 +638,8 @@ require_once 'config/authentication.php';
 <!---------------------------------Footer---------------------->
 <?php 
 include 'footer.php';
+ob_end_flush();
+
 ?>
 
 
