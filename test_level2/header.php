@@ -1,6 +1,7 @@
 <?php
 session_start();
-require 'config/config.php'
+require 'config/config.php';
+ob_start();
 ?>
 <!--------------------jquery------------------------------------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
