@@ -1,7 +1,9 @@
 <?php
-
-session_start();
-unset($_SESSION['login']);
-header('location:index.php');
-die();
+	session_start();
+	session_unset();
+	session_destroy();
+	//unset($_SESSION['login']);
+	header('location:index.php');
+	//die();
+	exit();
 ?>
