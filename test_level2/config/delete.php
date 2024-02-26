@@ -2,9 +2,8 @@
 require 'config.php';
 
 //xóa khóa học
-if(isset($_POST['delete'])){
+if(isset($_POST['deleteCourse'])){
     $id = $_POST['id'];
-
     $sql=" DELETE FROM courses
             WHERE course_id=$id";
     $query = mysqli_query($link,$sql);
@@ -26,9 +25,25 @@ if(isset($_POST['delete'])){
     }
 }
 
+//xóa người dùng
+if(isset($_POST['deleteUser'])){
+    $id = $_POST['id'];
+
+    $sql=" DELETE FROM users
+            WHERE user_id=$id";
+    $query = mysqli_query($link,$sql);
+
+
+    if($query){
+        echo "<script>alert('Xóa thành công');</script>";
+        //header('location:../admin.php');
+    } else {
+        echo "<script>alert('Có lỗi khi xóa!!');</script>";
+    }
+}
 
 //xóa giảng viên
-if(isset($_POST['delete'])){
+if(isset($_POST['deleteTeacher'])){
     $id = $_POST['id'];
 
     $sql=" DELETE FROM teachers
@@ -45,7 +60,7 @@ if(isset($_POST['delete'])){
 }
 
 //xóa môn học cho giảng viên
-if(isset($_POST['delete'])){
+if(isset($_POST['deleteTeachSubject'])){
     $id = $_POST['id'];
 
     $sql=" DELETE FROM teach_subject

@@ -11,6 +11,9 @@ $user_id = $_SESSION['user_id'];
     $result = mysqli_query($link, $sql);
     while($row = mysqli_fetch_array($result) ){
  
+
+$date = explode('-', $row['user_birthday']);
+$stringDate = $date[2] . '-' . $date[1] .'-'. $date[0];
 ?>
 <!--Đổi thông tin cá nhân-->
 <form action="config/user_edit_modal.php" method='post'>   
@@ -22,7 +25,7 @@ $user_id = $_SESSION['user_id'];
 
     <div class=" d-flex" >
         <label for="date" class='input100' >Ngày sinh:</label>
-        <input type="date" id="date" name="date" style='width: 100%; font-size: 20px' >
+        <input type="date" id="date" name="date" style='width: 100%; font-size: 20px' value="<?php echo $stringDate ?>">
     </div>
 
     <div class="wrap-input100 validate-input" >

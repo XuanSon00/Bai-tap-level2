@@ -1,54 +1,70 @@
+
 <?php 
 session_start();
-
-require('config.php');
-//Học sinh Đăng ký khóa học
-if (isset($_POST['user_course_submit'])) {
-    // Lấy thông tin khóa học từ form
+require 'config.php';
+/*var_dump($_POST);
+die('444');*/
+if(isset($_POST['user_course_submit_form'])) {
+    $user_id = $_SESSION['user_id'];
     $course_id = $_POST['course_id'];
     $course_subject = $_POST['course_subject'];
     $course_name = $_POST['course_name'];
     $course_class = $_POST['course_class'];
     $course_teacher = $_POST['course_teacher'];
-    $create_at = date('d-m-Y H:i:s');
-
-    // Lấy thông tin người dùng từ session
-    $user_id = $_SESSION['user_id'];
-    $user_name = $_SESSION['user_name'];
-    $username = $_SESSION['username'];
-    $user_active = $_SESSION['user_active'];
-
+    $created_at = date('Y-m-d H:i:s');
+    $user_name = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : "";
+    
     // Kiểm tra xem người dùng đã đăng ký khóa học hay chưa
-    $check_query = "    SELECT * 
-                        FROM user_courses 
-                        WHERE user_id = '$user_id' 
-                        AND course_id = '$course_id'";
-    $result = $link->query($check_query);
-
-
-    if ($result->num_rows > 0) { // kiểm tra đã đăng ký khóa học chưa
-        echo "<script>alert('Bạn đã đăng ký khóa học này rồi.');</script>";
-        echo "<script>window.location.href = '../course.php';</script>";
-    } elseif ($user_active != 0) { // kiểm tra xem người dùng đã được admin kích hoạt tài chưa
-        // Thực hiện INSERT vào bảng user_course
-        $insert_query = "INSERT INTO user_courses (user_name, user_id, course_id, course_subject, course_name, course_class, course_teacher, created_at)
-                         VALUES ('$user_name' ,'$user_id', '$course_id', '$course_subject', '$course_name', '$course_class', '$course_teacher', Now())";
-
-        if ($link->query($insert_query) === TRUE) {
-            echo "<script>alert('Đăng ký khóa học thành công');</script>";
-            echo "<script>window.location.href = '../course.php';</script>";
+    $check_query = "SELECT * FROM user_courses WHERE user_id = '$user_id' AND course_id = '$course_id'";
+    /*die('434334');*/
+    $check_result = mysqli_query($link, $check_query);
+    
+    if($check_result) {
+        $num_rows = mysqli_num_rows($check_result);
+        
+        if($num_rows == 0) {
+            // Kiểm tra trạng thái user_active trước khi thêm vào bảng user_courses
+            $user_query = "SELECT user_active FROM users WHERE user_id = '$user_id'";
+            $user_result = mysqli_query($link, $user_query);
+            /*die('dfdfdfsds');*/
+            if($user_result) {
+                $user_row = mysqli_fetch_assoc($user_result);
+                $user_active = $user_row['user_active'];
+                
+                if($user_active != 0) {
+                    // Thực hiện truy vấn INSERT để lưu thông tin vào bảng user_courses
+                    $query = "INSERT INTO user_courses (user_name, user_id, course_id, course_subject, course_name, course_class, course_teacher, created_at)
+                              VALUES ('$user_name', '$user_id', '$course_id', '$course_subject', '$course_name', '$course_class', '$course_teacher', '$created_at')";
+                    
+                    if(mysqli_query($link, $query)) {
+                        header("Content-Type: application/json");
+                        /*die('55');*/
+                        // Đăng ký khóa học thành công
+                       $response = array(
+                            'success' => true,
+                            'message' => 'Đăng ký khóa học thành công'
+                        );
+                        echo json_encode($response);
+                        exit();
+                        /*echo "<script>alert('Thành công');</script>";*/
+                    } else {
+                        echo "<script>alert('Đã có lỗi xảy ra khi đăng ký khóa học');</script>";
+                    }
+                } else {
+                    //  user_active chưa được admin kích hoạt
+                    echo "<script>alert('Vui lòng liên hệ admin để kích hoạt khóa học');</script>";
+                }
+            } else {
+                echo "Lỗi đăng ký thông tin " ;
+            }
         } else {
-            echo "<script>alert('Đã có lỗi xảy ra khi đăng ký khóa học');</script>";
+            echo "<script>alert('Bạn đã đăng ký khóa học này');</script>";
+            echo "<script>window.location.href = '../course.php';</script>";
         }
     } else {
-        echo "<script>alert('Vui lòng liên hệ admin để kích hoạt khóa học');</script>";
+        echo "Lỗi kiểm tra đăng ký khóa học: ";
     }
 }
-
-
-
-
-
 // Xóa môn học đăng ký
 
 if(isset($_POST['delete_course'])) {
@@ -66,4 +82,6 @@ if(isset($_POST['delete_course'])) {
         echo "<script>Có lỗi trong quá trình xóa môn học</script>";
     }
 }
+
 ?>
+

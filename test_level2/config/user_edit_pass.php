@@ -6,39 +6,50 @@ require 'config.php';
 
    if(isset($_POST['submit'])){
     $user_id = $_SESSION['user_id'];
-    $password = mysqli_real_escape_string($link, $_POST['password']);
-    $newPassword = mysqli_real_escape_string($link, $_POST['newPassword']);
-    $confirmPassword = mysqli_real_escape_string($link, $_POST['confirmPassword']);
-    $query = "  SELECT user_pass
-                FROM users
-                WHERE user_id = $user_id";
-    $result= mysqli_query($link,$query);
-    $row = mysqli_fetch_assoc($result);
-    $currentPassword = $row['user_pass'];
+    $password = $_POST['password'];
+    $newPassword = $_POST['newPassword'];
+    $confirmPassword = $_POST['confirmPassword'];
 
-    if($password === $currentPassword && password_verify($newPassword, $confirmPassword)) {
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $updateQuery ="  UPDATE users
-                        SET user_pass ='$hashedPassword'
-                        WHERE user_id = $user_id";
-        $updateResult= mysqli_query($link,$updateQuery);
-        if($updateQuery){
+    if($newPassword === $confirmPassword) {
+        $query = "SELECT user_pass FROM users WHERE user_id = ?";
+        $stmt = mysqli_prepare($link, $query);
+        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        $currentPassword = $row['user_pass'];
+
+        if(password_verify($password, $currentPassword)) {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $updateQuery = "UPDATE users SET user_pass = ? WHERE user_id = ?";
+            $updateStmt = mysqli_prepare($link, $updateQuery);
+            mysqli_stmt_bind_param($updateStmt, "si", $hashedPassword, $user_id);
+            $updateResult = mysqli_stmt_execute($updateStmt);
+
+            if($updateResult){
+                echo "<script>
+                    alert('Cập nhật mật khẩu thành công');
+                    window.location.href = '../user.php'; 
+                </script>";
+            } else {
+                echo "<script>
+                    alert('Lỗi cập nhật mật khẩu');
+                    window.location.href = '../user.php'; 
+                </script>";
+            }
+        } else {
             echo "<script>
-                alert('cập nhật mật khẩu thành công');
-                window.location.href = '../user.php'; 
-            </script>";
-        } else{
-            echo "<script>
-                alert('Lỗi cập nhật mật khẩu');
-                window.location.href = '../user.php'; 
-            </script>";
+                    alert('Mật khẩu hiện tại không chính xác');
+                    window.location.href = '../user.php'; 
+                </script>";
         }
-    } else{
+    } else {
         echo "<script>
-                alert('Mật khẩu không khớp');
+                alert('Mật khẩu mới không khớp');
                 window.location.href = '../user.php'; 
             </script>";
     }
 }
+
 
 ?>

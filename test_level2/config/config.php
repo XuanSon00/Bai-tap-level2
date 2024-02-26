@@ -2,7 +2,7 @@
 $servername = 'localhost';
 $username = 'root';
 $password = '';
-$dbname = 'php_level2';
+$dbname = 'test_level_2';
 $link = mysqli_connect($servername, $username, $password, $dbname);
 
 
