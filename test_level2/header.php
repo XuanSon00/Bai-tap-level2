@@ -1,9 +1,15 @@
 <?php
 session_start();
 require 'config/config.php';
-ob_start();
+$page= '';
 ?>
-<!--------------------jquery------------------------------------->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Header</title>
+  <!--------------------jquery------------------------------------->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!--------------------Bootstrap5------------------------------------->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -22,7 +28,8 @@ ob_start();
 <!--------------------CSS FILE------------------------------------->
 <link rel="stylesheet" href="css/header.css">
 <!--------------------------------------------------------->
-
+</head>
+<body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
   <div class="container-fluid" style="padding: 0">
     <a class="navbar-brand" href="#"><img src="img/a.png" alt="" style='width: 100px'></a>
@@ -88,3 +95,6 @@ ob_start();
     </div>
   </div>
 </nav>
+
+</body>
+</html>

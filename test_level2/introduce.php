@@ -61,6 +61,3 @@ require 'config/config.php';
 		</div>
 	</div>
 
-    <?php
-    include 'footer.php';
-?>

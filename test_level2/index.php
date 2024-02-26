@@ -105,8 +105,3 @@ require 'config/config.php';
 
 
 
-<?php
-    include 'footer.php';
-?>
-
-

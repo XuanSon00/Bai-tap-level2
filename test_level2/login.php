@@ -1,59 +1,77 @@
 <?php
-	$page='login'; 
-	include 'header.php';
-	require 'config/config.php';
+ob_start();
+include 'header.php';
+$page='login'; 
+require 'config/config.php';
+if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 1) {
+    // Người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    header('location: user.php');
+    exit();
+} elseif(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 0){
+    // Người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    header('location: admin.php');
+    exit();
+}
 ?>
 <link rel="stylesheet" href="css/register.css">
 
 <?php 
-	if (isset($_POST['submit'])) {
+	
+
+	if(isset($_POST['submit'])){
 		$username = mysqli_real_escape_string($link,$_POST['username']);
-		$password = mysqli_real_escape_string($link,$_POST['password']);
-		$result = mysqli_query($link, "SELECT *
+        $password = mysqli_real_escape_string($link,$_POST['password']);
+		$result = mysqli_query($link, "	SELECT *
 										FROM users
 										WHERE username ='$username'");
-		/*
-		Sử dụng prepared trong câu sql ở trên để hạn chế lỗi sql injection
-		*/
 		$row = mysqli_fetch_assoc($result);
 
-		if (mysqli_num_rows($result) > 0) {
-			if (password_verify($password, $row['user_pass'])) {
+		if(mysqli_num_rows($result) >0){
+			//if($password == $row['user_pass'])
+			if (password_verify($password, $row['user_pass'])){
+				/*$_SESSION['username'] = $row['username'];// lưu tên người dùng vào session
+				$_SESSION['user_role'] = $row['user_role'];
+				$_SESSION['user_name'] = $row['user_name'];
+				$_SESSION['user_pass'] = $row['user_pass'];
+				$_SESSION['user_birthday'] = $row['user_birthday'];
+				$_SESSION['user_email'] = $row['user_email'];
+				$_SESSION['user_active'] = $row['user_active'];*/
 				$_SESSION['user_id'] = $row['user_id'];
+				if($row['user_role'] == 1){ // người dùng
 					$_SESSION['login']=true;
 					$_SESSION['id']= $row['user_id'];
 					$_SESSION['user_role']= $row['user_role'];
-				if ($row['user_role'] == 1) { // người dùng
-					//$_SESSION['login']=true;
-					//$_SESSION['id']= $row['user_id'];
-					//$_SESSION['user_role']= $row['user_role'];
+					$_SESSION['user_active']= $row['user_active'];
 					header('location:user.php');
-					//exit();
-				//} elseif ($row['user_role'] == 0) { //admin
-				} else {
-					//$_SESSION['login']=true;
-					//$_SESSION['id']= $row['user_id'];
-					//$_SESSION['user_role']= $row['user_role'];
+					exit();
+				} elseif($row['user_role'] ==0) { //admin
+					$_SESSION['login']=true;
+					$_SESSION['id']= $row['user_id'];
+					$_SESSION['user_role']= $row['user_role'];
+					$_SESSION['user_active']= $row['user_active'];
 					header('location:admin.php');
-					//exit();
+					exit();
 				}
-			} else {
+			} else{
 				echo "<script>Swal.fire({
 					icon: 'error',
 					title: 'Lỗi',
-					text: 'Mật khẩu không đúng!', //=> Mật khẩu hoặc tên đăng nhập không đúng
-					});
-					</script>";
+					text: 'Mật khẩu không đúng!',
+				  });
+				  </script>";
 			}
-		} else {
+		} else{
 			echo "<script>Swal.fire({
 				icon: 'error',
 				title: 'Lỗi',
-				text: 'Tài khoản không hợp lệ!', // => Tài khoản không tồn tại
-				});
-				</script>";
+				text: 'Tài khoản không hợp lệ!',
+			  });
+			  </script>";
 		}
+		
 	}
+
+
 ?>
 
 <div class="limiter">
@@ -103,7 +121,5 @@
 		</div>
 	</div>
 
-<?php
-	include 'footer.php';
-?>
-<script src="js/main.js"></script>
+
+	<script src="js/main.js"></script>
